@@ -9,6 +9,7 @@ COPY --from=innovanon/deutex     /tmp/deutex.txz     /tmp/
 RUN cat   /tmp/*.txz  \
   | tar Jxf - -i -C / \
  && rm -v /tmp/*.txz  \
+ && ldconfig          \
  && command -v                        deutex
 #RUN tar xf                       /tmp/zlib.txz       -C / \
 # && tar xf                       /tmp/bzip2.txz      -C / \
@@ -38,6 +39,7 @@ RUN sleep 31 \
  && make                                      \
  && make DESTDIR=/tmp/zennode install         \
  && cd           /tmp/zennode                 \
+ && strip.sh .                                \
  && tar acf        ../zennode.txz .           \
  && rm -rf           $LFS/sources/zennode
 
