@@ -6,10 +6,7 @@ COPY --from=innovanon/xz         /tmp/xz.txz         /tmp/
 COPY --from=innovanon/libpng     /tmp/libpng.txz     /tmp/
 COPY --from=innovanon/jpeg-turbo /tmp/jpeg-turbo.txz /tmp/
 COPY --from=innovanon/deutex     /tmp/deutex.txz     /tmp/
-RUN cat   /tmp/*.txz  \
-  | tar Jxf - -i -C / \
- && rm -v /tmp/*.txz  \
- && ldconfig          \
+RUN extract.sh \
  && command -v                        deutex
 #RUN tar xf                       /tmp/zlib.txz       -C / \
 # && tar xf                       /tmp/bzip2.txz      -C / \
@@ -28,6 +25,7 @@ FROM builder-04 as zennode
 ARG LFS=/mnt/lfs
 USER lfs
 RUN sleep 31 \
+ && command -v strip.sh                 \
  && git clone --depth=1 --recursive           \
       https://github.com/Doom-Utils/zennode.git \
  && cd                            zennode     \
@@ -42,6 +40,8 @@ RUN sleep 31 \
  && strip.sh .                                \
  && tar acf        ../zennode.txz .           \
  && rm -rf           $LFS/sources/zennode
+      # TODO
+#"${CONFIG_OPTS[@]}"                 \
 
 FROM scratch as final
 COPY --from=zennode /tmp/zennode.txz /tmp/
