@@ -8,19 +8,7 @@ COPY --from=innovanon/jpeg-turbo /tmp/jpeg-turbo.txz /tmp/
 COPY --from=innovanon/deutex     /tmp/deutex.txz     /tmp/
 RUN extract.sh \
  && command -v                        deutex
-#RUN tar xf                       /tmp/zlib.txz       -C / \
-# && tar xf                       /tmp/bzip2.txz      -C / \
-# && tar xf                       /tmp/xz.txz         -C / \
-# && tar xf                       /tmp/libpng.txz     -C / \
-# && tar xf                       /tmp/jpeg-turbo.txz -C / \
-# && tar xf                       /tmp/deutex.txz     -C / \
-# && rm -v                        /tmp/zlib.txz            \
-#                                 /tmp/bzip2.txz           \
-#                                 /tmp/xz.txz              \
-#                                 /tmp/libpng.txz          \
-#                                 /tmp/jpeg-turbo.txz      \
-#                                 /tmp/deutex.txz          \
-# && command -v                        deutex
+
 FROM builder-04 as zennode
 ARG LFS=/mnt/lfs
 USER lfs
@@ -38,7 +26,7 @@ RUN sleep 31 \
  && make DESTDIR=/tmp/zennode install         \
  && cd           /tmp/zennode                 \
  && strip.sh .                                \
- && tar acf        ../zennode.txz .           \
+ && tar  pacf        ../zennode.txz .           \
  && rm -rf           $LFS/sources/zennode
       # TODO
 #"${CONFIG_OPTS[@]}"                 \
